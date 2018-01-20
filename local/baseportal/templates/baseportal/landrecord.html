@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block content %}
+<script>
+function getDistrict(m)
+{
+	data={"district":m};
+	url="/webapi/taluk/"
+
+	$.ajax({
+		method: "GET",
+	  dataType: "json",
+	  url: url,
+	  data: data,
+	  success: function(x){
+			htm="<option>Select Taluk</option>"
+			for (i in x){
+				htm+="<option value="+x[i].id+">"+x[i].name+"</option>"
+			}
+			document.getElementById('id_taluk').innerHTML=htm;
+		}
+	});
+}
+function getTaluk(htm)
+{
+
+	url="/webapi/grampanchayat/"
+	data={"taluk":htm};
+
+	$.ajax({
+		method: "GET",
+		dataType: "json",
+		url: url,
+		data: data,
+		success: function(y){
+			non="<option>Select GP</option>"
+			for(i in y)
+			{
+				non+="<option value="+y[i].id+">"+y[i].name+"</option>"
+			}
+			document.getElementById('id_gram_panchayat').innerHTML=non;
+		}
+	});
+}
+</script>
+<form class="form-inline" method='post'>
+	<div clas="form-action">
+	{% csrf_token %}
+	<table>
+		<tr>
+		<th>{{form}}<th></tr>
+		</table>
+	<tr><button type="submit" class="btn btn-success btn-sm ">Get Record</button></tr>
+</div>
+</form>
+<table>
+	<tr>
+		<th>Lot No</th>
+		<td>{{result.lotno}}</td>
+	</tr>
+	<tr>
+		<th>Name</th>
+		<td>{{result.name}}</td>
+	</tr>
+	<tr>
+		<th>AADHAR</th>
+		<td>{{result.aadhar}}</td>
+	</tr>
+	<tr>
+		<th>PAN</th>
+		<td>{{result.pan}}</td>
+	</tr>
+</table>
+{% endblock %}
